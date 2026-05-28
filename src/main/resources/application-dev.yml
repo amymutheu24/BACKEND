@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kicd_db
+    username: postgres         # change to your local postgres username
+    password: postgres         # change to your local postgres password
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 20000
+      connection-test-query: SELECT 1
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+    clean-on-validation-error: true   # DEV ONLY — wipes and rebuilds on mismatch
+
+  jpa:
+    hibernate:
+      ddl-auto: validate             # Hibernate validates against Flyway schema — never create/update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.flywaydb: DEBUG              # see every migration step in the console
+    org.hibernate.SQL: DEBUG
